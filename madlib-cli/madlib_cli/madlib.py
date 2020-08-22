@@ -1,3 +1,5 @@
+import re
+
 welcoming_message = '''
 ***************************************************************
                    Welcome to Madlib CLI game               
@@ -9,40 +11,38 @@ welcoming_message = '''
 ***************************************************************
 '''
 
-import re
-
 # with open('madlib_cli/files/story.txt') as file:
 #     content = file.read()
     
 # content
 
 def read_template():
-    file = open('madlib_cli/files/story.txt', 'r')
+    file = open('madlib-cli/files/story.txt', 'r')
     content = file.read()
     return content
 
-def parse(content):
+def parse(text):
     words = []
-    replace = re.findall(r'\{.*?\}', content)
+    replace = re.findall(r'\{.*?\}', text)
     for i in replace:
         words.append(i.strip("{ }"))
-        return words
+    return words
 
-def merge(content):
-    inputs = parse(content)
-    word = []
-    for i in range(len(inputs)):
-        word.append("enter a/an {} ".format(lst[i]))
-    return (re.sub(r' {[^}]*}',' {} ',content)).format(*word)
+def merge(text, words):
+    inputs = parse(text)
+    return (re.sub(r' {[^}]*}', ' {}', text)).format(*words)
 
 def file_copy(text):
     print(text)
-    file = open('madlib_cli/files/user_story.txt', w)
+    file = open('madlib-cli/files/user_story.txt', 'w')
     file.write(text)
 
 if __name__ == "__main__":
     print(welcoming_message)
     content = read_template()
     inputs = parse(content)
-    copying = merge(content)
+    words = []
+    for i in range(len(inputs)):
+        words.append(input('enter a/an {} '.format(inputs[i])))
+    copying = merge(content, words)
     file_copy(copying)
